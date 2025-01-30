@@ -20,3 +20,36 @@ func (s *Student) GetName() string {
 func (s *Student) SetName(name string) {
     s.Name = name
 }
+
+func (s *Student) GetEmail() string {
+    return s.Email
+}
+
+func (s *Student) SetEmail(email string) {
+    s.Email = email
+}
+
+func (s *Student) GetCareer() string {
+    return s.Career
+}
+
+func (s *Student) SetCareer(career string) {
+    s.Career = career
+}
+
+func (s *Student) GetMatricula() string {
+    return s.Matricula
+}
+
+func (s *Student) SetMatricula(matricula string) {
+    s.Matricula = matricula
+}
+
+func (s *Student) GetID() int {
+    return s.ID
+}   
+
+func (s *Student) SetID(id int) {
+    s.ID = id
+}   
+
