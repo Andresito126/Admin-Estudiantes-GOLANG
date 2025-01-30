@@ -32,3 +32,12 @@ func CreateProductController() *controllers.CreateStudentController {
 
 	return controllers.NewCreateStudentController(ucCreateProduct)
 }
+
+func FindAllStudentController() *controllers.FindAllStudentController{
+	ucFindAllStudent := application.NewFindAllStudentUseCase(&mySQl)
+	
+	return controllers.NewFindAllStudentController(ucFindAllStudent)
+}
+
+
+

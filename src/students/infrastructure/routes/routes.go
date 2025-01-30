@@ -10,8 +10,9 @@ func StudentRoutes(router *gin.Engine){
 	routes := router.Group("students")
 
 	saveStudent := dependencies.CreateProductController()
+	finAllStudent := dependencies.FindAllStudentController()
 
 
 	routes.POST("/add", saveStudent.Run)
-
+	routes.GET("/", finAllStudent.Run)
 }
