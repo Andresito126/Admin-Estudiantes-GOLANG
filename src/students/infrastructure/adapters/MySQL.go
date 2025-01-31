@@ -56,3 +56,16 @@ if err := rows.Err(); err != nil {
 
 return students, nil
 }
+
+func (mysql *MySQL) Update(id int, student entities.Student) error {
+	query := "UPDATE students SET name = ?, email= ?, career= ?, matricula = ? WHERE id = ?"
+	_, err := mysql.db.Exec(query, student.Name, student.Email, student.Career, student.Matricula, id)
+	fmt.Println("Estudiante actualizado")
+	return err
+}
+
+func (mysql *MySQL) Delete(id int) error {
+	query := "DELETE FROM students WHERE id = ?"
+	_, err := mysql.db.Exec(query, id)
+	return err 
+}

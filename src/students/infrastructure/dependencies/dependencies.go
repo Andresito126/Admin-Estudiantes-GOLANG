@@ -39,5 +39,14 @@ func FindAllStudentController() *controllers.FindAllStudentController{
 	return controllers.NewFindAllStudentController(ucFindAllStudent)
 }
 
+func UpdateStudentController() *controllers.UpdateStudentController {
+	ucUpdateStudent := application.NewUpdateStudentUseCase(&mySQl)
 
+	return controllers.NewUpdateStudentController(ucUpdateStudent)
+}
 
+func DeleteStudentController() *controllers.DeleteStudentController{
+	ucDeleteStudent := application.NewDeleteStudentUseCase(&mySQl)
+	
+	return controllers.NewDeleteStudentController(ucDeleteStudent)
+}

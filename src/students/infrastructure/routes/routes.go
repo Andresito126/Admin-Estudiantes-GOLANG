@@ -11,8 +11,14 @@ func StudentRoutes(router *gin.Engine){
 
 	saveStudent := dependencies.CreateProductController()
 	finAllStudent := dependencies.FindAllStudentController()
+	updateStudent := dependencies.UpdateStudentController()
+	deleteStudent := dependencies.DeleteStudentController()
 
 
-	routes.POST("/add", saveStudent.Run)
+	routes.POST("/", saveStudent.Run)
 	routes.GET("/", finAllStudent.Run)
+	routes.PUT("/:id", updateStudent.Run)
+	routes.DELETE("/:id", deleteStudent.Run)
+
+
 }
