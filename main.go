@@ -3,14 +3,19 @@ package main
 import (
 	
 
-	"github.com/Andresito126/go-estudiantes/src/students/infrastructure/dependencies"
-	"github.com/Andresito126/go-estudiantes/src/students/infrastructure/routes"
+	studentsBD "github.com/Andresito126/go-estudiantes/src/students/infrastructure/dependencies"
+	studentsRoutes "github.com/Andresito126/go-estudiantes/src/students/infrastructure/routes"
+	coursesRoutes "github.com/Andresito126/go-estudiantes/src/courses/infrastructure/routes"
+	coursesBD "github.com/Andresito126/go-estudiantes/src/courses/infrastructure/dependencies"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    dependencies.Init()
+    studentsBD.Init()
+	coursesBD.Init()
 	r := gin.Default()
-	routes.StudentRoutes(r)
+
+	studentsRoutes.StudentRoutes(r)	
+	coursesRoutes.CoursesRoutes(r)
 	r.Run()
 }

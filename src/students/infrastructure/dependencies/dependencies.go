@@ -28,9 +28,9 @@ func Init (){
 //casos de uso
 
 func CreateProductController() *controllers.CreateStudentController {
-	ucCreateProduct := application.NewCreateStudentUseCase(&mySQl)
+	ucCreateStudent := application.NewCreateStudentUseCase(&mySQl)
 
-	return controllers.NewCreateStudentController(ucCreateProduct)
+	return controllers.NewCreateStudentController(ucCreateStudent)
 }
 
 func FindAllStudentController() *controllers.FindAllStudentController{
