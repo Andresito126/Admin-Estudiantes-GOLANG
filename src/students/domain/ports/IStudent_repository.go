@@ -7,5 +7,5 @@ type IStudentRepository interface {
 	FindAll()([]entities.Student, error)
 	Update(id int, student entities.Student)error
 	Delete(id int) error
-	
+	FindById(id int)([]entities.Student, error)
 }

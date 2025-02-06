@@ -17,7 +17,6 @@ func NewMySQL(db *sql.DB) *MySQL {
 }
 
 func (mysql *MySQL) Save(course entities.Course) error {
-
 	query := "INSERT INTO courses (name, duration) VALUES (?, ?)"
 	_, err := mysql.db.Exec(query, course.Name, course.Duration)
 

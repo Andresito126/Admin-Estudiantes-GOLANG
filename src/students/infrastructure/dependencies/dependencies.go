@@ -50,3 +50,12 @@ func DeleteStudentController() *controllers.DeleteStudentController{
 	
 	return controllers.NewDeleteStudentController(ucDeleteStudent)
 }
+
+
+func FindByIdController() * controllers.FindByIdController{
+	ucFindById := application.NewFindByIdUseCase(&mySQl)
+
+	return controllers.NewFindByIdController(ucFindById)
+
+
+}

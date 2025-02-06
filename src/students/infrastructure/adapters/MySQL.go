@@ -69,3 +69,26 @@ func (mysql *MySQL) Delete(id int) error {
 	_, err := mysql.db.Exec(query, id)
 	return err 
 }
+
+
+func (mysql *MySQL) FindById(id int) ([]entities.Student, error) {
+	query := "SELECT * FROM students WHERE id=?"
+	rows, err := mysql.db.Query(query, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var students []entities.Student
+	for rows.Next() {
+		var student entities.Student
+		err := rows.Scan(&student.ID, &student.Name, &student.Email, &student.Career, &student.Matricula)
+		if err != nil {
+			return nil, err
+		}
+		students = append(students, student)
+	}
+	fmt.Println("Estudiante encontrado")
+	return students, nil
+}
