@@ -9,12 +9,9 @@ func InscriptionRoutes(router *gin.Engine) {
 
 	
 	routes := router.Group("inscriptions")
-
 	
 	saveInscription := dependencies.CreateInscriptionController()
 	findAllInscriptions := dependencies.FindAllInscriptionsController()
-	
-
 	
 	routes.POST("/", saveInscription.Run)                
 	routes.GET("/", findAllInscriptions.Run)             
