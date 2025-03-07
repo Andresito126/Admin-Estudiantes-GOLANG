@@ -12,14 +12,8 @@ type RabbitRepository struct {
     conn *amqp.Connection
 }
 
-func NewRabbitRepository(url string) *RabbitRepository {
-    conn, err := amqp.Dial(url)
-    if err != nil {
-        log.Fatalf("No se pudo conectar a RabbitMQ: %v", err)
-    }
-    return &RabbitRepository{
-        conn: conn,
-    }
+func NewRabbitRepository(conn *amqp.Connection) *RabbitRepository {
+	return &RabbitRepository{conn: conn}
 }
 
 func (r *RabbitRepository) Publish(inscription entities.Inscription) error {
@@ -30,8 +24,8 @@ func (r *RabbitRepository) Publish(inscription entities.Inscription) error {
     defer ch.Close()
 
     q, err := ch.QueueDeclare(
-        "inscriptionsQueue", // nombre de la cola
-        true    ,               // durable
+        "inscriptionsQueue", // name
+        true,               // durable
         false,               // delete when unused
         false,               // exclusive
         false,               // no-wait
