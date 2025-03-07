@@ -13,9 +13,10 @@ import (
 
 var (
     mySQL        adapters.MySQL
-    rabbitRepo   *adapters.RabbitRepository // adapter  de RabbitMQ
-    eventService *services.EventService     // service de event
+    rabbitRepo   *adapters.RabbitRepository 
+    eventService *services.EventService     
 )
+
 
 func Init() {
     
@@ -35,30 +36,21 @@ func Init() {
     
     rabbitURL := fmt.Sprintf("amqp://%s:%s@%s:%s/", user, password, host, port)
 
-    //  adaptador de RabbitMQ
+    //adptador
     rabbitRepo = adapters.NewRabbitRepository(rabbitURL)
 
-    //  servicio de eventsew
+    // event
     eventService = services.NewEventService(rabbitRepo)
 }
 
+
 func CreateInscriptionController() *controllers.SaveInscriptionController {
-    ucCreateInscription := application.NewSaveInscriptionUseCase(&mySQL, eventService)
-    return controllers.NewSaveInscriptionController(ucCreateInscription)
+    ucCreateInscription := application.NewSaveInscriptionUseCase(&mySQL)
+    return controllers.NewSaveInscriptionController(ucCreateInscription, eventService)
 }
+
 
 func FindAllInscriptionsController() *controllers.FindAllInscriptionsController {
     ucFindAllInscriptions := application.NewGetAllInscriptionsUseCase(&mySQL)
     return controllers.NewFindAllInscriptionsController(ucFindAllInscriptions)
 }
-// func UpdateStatusController() *controllers.UpdateStatusController {
-// 	ucUpdateStatus := application.NewUpdateStatusUseCase(&mySQL)
-// 	return controllers.NewUpdateStatusController(ucUpdateStatus)
-// }
-
-// func GetByIdInscriptionController() *controllers.FindOneInscriptionController {
-// 	ucGetByIdInscription := application.NewGetByIdInscription(&mySQL)
-// 	return controllers.NewFindOneInscriptionController(ucGetByIdInscription)
-// }
-
-

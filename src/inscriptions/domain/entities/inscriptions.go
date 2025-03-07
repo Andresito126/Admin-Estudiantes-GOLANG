@@ -14,8 +14,7 @@ type InscriptionStatus string
 
 const (
 	Pending   InscriptionStatus = "pending"
-	Confirmed InscriptionStatus = "confirmed"
-	Rejected  InscriptionStatus = "rejected"
+	
 )
 
 

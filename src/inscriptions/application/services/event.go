@@ -1,9 +1,8 @@
 package services
 
 import (
-    "log"
-
     "github.com/Andresito126/go-estudiantes/src/inscriptions/application/repository"
+    "github.com/Andresito126/go-estudiantes/src/inscriptions/domain/entities"
 )
 
 type EventService struct {
@@ -16,9 +15,6 @@ func NewEventService(rabbitRepo repository.IRabbitRepository) *EventService {
     }
 }
 
-func (s *EventService) PublishEvent(queue string, message string) error {
-    if s.rabbitRepo == nil {
-        log.Fatal("RabbitRepo no inicializado")
-    }
-    return s.rabbitRepo.Publish(queue, message)
+func (e *EventService) PublishEvent(inscription entities.Inscription) error {
+    return e.rabbitRepo.Publish(inscription)
 }
