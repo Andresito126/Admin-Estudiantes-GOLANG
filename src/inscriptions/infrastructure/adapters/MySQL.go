@@ -16,19 +16,28 @@ type MySQL struct {
 func NewMySQL(db *sql.DB) *MySQL {
     return &MySQL{db: db}
 }
-
 func (mysql *MySQL) Save(inscription *entities.Inscription) error {
 
     query := "INSERT INTO inscriptions (student_id, course_id, status) VALUES (?, ?, ?)"
-    _, err := mysql.db.Exec(query, inscription.StudentID, inscription.CourseID, inscription.Status)
+    result, err := mysql.db.Exec(query, inscription.StudentID, inscription.CourseID, inscription.Status)
 
     if err != nil {
         return err
     }
 
+    // Ootiene el id
+    lastInsertID, err := result.LastInsertId()
+    if err != nil {
+        return err
+    }
+
+    //asigna id
+    inscription.ID = int(lastInsertID)
+
     fmt.Println("Inscripción guardada con éxito")
     return nil
 }
+
 
 
 func (mysql *MySQL) FindByID(id int) (*entities.Inscription, error) {
