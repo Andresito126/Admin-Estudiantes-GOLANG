@@ -16,20 +16,27 @@ func NewMySQL(db *sql.DB) *MySQL {
 	return &MySQL{db: db}
 }
 
-func (mysql *MySQL) Save(course entities.Course) error {
-	query := "INSERT INTO courses (name, duration) VALUES (?, ?)"
-	_, err := mysql.db.Exec(query, course.Name, course.Duration)
-
+func (mysql *MySQL) Save(course entities.Course) (int, error) {
+	query := "INSERT INTO courses (name, duration, available_slots) VALUES (?, ?, ?)"
+	result, err := mysql.db.Exec(query, course.Name, course.Duration, course.AvailableSlots)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	fmt.Println("Materia guardado con éxito")
-	return nil
+	// Obtener el ID generado
+	lastID, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	fmt.Println("Curso guardado con éxito con ID:", lastID)
+	return int(lastID), nil
 }
 
+
+
 func (mysql *MySQL) FindAll() ([]entities.Course, error) {
-	query := "SELECT * FROM courses"
+	query := "SELECT id, name, duration, available_slots FROM courses"
 
 	rows, err := mysql.db.Query(query)
 	if err != nil {
@@ -40,7 +47,7 @@ func (mysql *MySQL) FindAll() ([]entities.Course, error) {
 	var courses []entities.Course
 	for rows.Next() {
 		var course entities.Course
-		if err := rows.Scan(&course.ID, &course.Name, &course.Duration); err != nil {
+		if err := rows.Scan(&course.ID, &course.Name, &course.Duration, &course.AvailableSlots); err != nil {
 			return nil, err
 		}
 		courses = append(courses, course)
@@ -54,9 +61,9 @@ func (mysql *MySQL) FindAll() ([]entities.Course, error) {
 }
 
 func (mysql *MySQL) Update(id int, course entities.Course) error {
-	query := "UPDATE courses SET name = ?, duration = ? WHERE id = ?"
-	_, err := mysql.db.Exec(query, course.Name,  course.Duration, id)
-	fmt.Println("Materia actualizado")
+	query := "UPDATE courses SET name = ?, duration = ?, available_slots = ? WHERE id = ?"
+	_, err := mysql.db.Exec(query, course.Name, course.Duration, course.AvailableSlots, id)
+	fmt.Println("Curso actualizado")
 	return err
 }
 
