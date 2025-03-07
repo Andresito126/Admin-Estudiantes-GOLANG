@@ -1,8 +1,10 @@
 package adapters
 
 import (
+    "encoding/json"
     "log"
 
+    "github.com/Andresito126/go-estudiantes/src/inscriptions/domain/entities"
     "github.com/streadway/amqp"
 )
 
@@ -10,17 +12,11 @@ type RabbitRepository struct {
     conn *amqp.Connection
 }
 
-func NewRabbitRepository(url string) *RabbitRepository {
-    conn, err := amqp.Dial(url)
-    if err != nil {
-        log.Fatalf("no se pudo conectar a rabbit: %v", err)
-    }
-    return &RabbitRepository{
-        conn: conn,
-    }
+func NewRabbitRepository(conn *amqp.Connection) *RabbitRepository {
+	return &RabbitRepository{conn: conn}
 }
 
-func (r *RabbitRepository) Publish(inscriptionQueue string, message string) error {
+func (r *RabbitRepository) Publish(inscription entities.Inscription) error {
     ch, err := r.conn.Channel()
     if err != nil {
         return err
@@ -28,13 +24,19 @@ func (r *RabbitRepository) Publish(inscriptionQueue string, message string) erro
     defer ch.Close()
 
     q, err := ch.QueueDeclare(
-        inscriptionQueue, // nombre de la cola
-        true, // durable
-        false, // delete when unused
-        false, // exclusive
-        false, // no-wait
-        nil,   // arguments
+        "inscriptionsQueue", // name
+        true,               // durable
+        false,               // delete when unused
+        false,               // exclusive
+        false,               // no-wait
+        nil,                 // arguments
     )
+    if err != nil {
+        return err
+    }
+
+    // Convertir la inscripción a JSON
+    body, err := json.Marshal(inscription)
     if err != nil {
         return err
     }
@@ -45,14 +47,14 @@ func (r *RabbitRepository) Publish(inscriptionQueue string, message string) erro
         false,  // mandatory
         false,  // immediate
         amqp.Publishing{
-            ContentType: "text/plain",
-            Body:        []byte(message),
+            ContentType: "application/json",
+            Body:        body,
         },
     )
     if err != nil {
         return err
     }
 
-    log.Printf("Mensaje enviado a la cola %s: %s", inscriptionQueue, message)
+    log.Printf("Mensaje enviado a la cola %s: %s", q.Name, string(body))
     return nil
 }
