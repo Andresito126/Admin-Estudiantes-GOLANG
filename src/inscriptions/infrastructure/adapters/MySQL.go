@@ -28,8 +28,10 @@ func (mysql *MySQL) Save(inscription *entities.Inscription) error {
     // Ootiene el id
     lastInsertID, err := result.LastInsertId()
     if err != nil {
+        fmt.Println("Error al obtener el LastInsertId:", err)
         return err
     }
+        inscription.ID = int(lastInsertID)
 
     //asigna id
     inscription.ID = int(lastInsertID)
