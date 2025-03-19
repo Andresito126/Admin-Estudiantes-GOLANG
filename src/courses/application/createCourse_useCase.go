@@ -15,6 +15,8 @@ func NewSaveCourseUseCase(courseRepository ports.ICourseRepository) *SaveCourseU
     
 }
 
-func (useCase *SaveCourseUseCase) Run(course entities.Course) error{
-	return useCase.courseRepository.Save(course)
+func (useCase *SaveCourseUseCase) Run(course entities.Course) (int, error) {
+	id, err := useCase.courseRepository.Save(course)
+	return id, err
 }
+
